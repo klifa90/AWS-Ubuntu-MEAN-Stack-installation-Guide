@@ -1,5 +1,6 @@
 # AWS-Ubuntu-MEAN-Stack-installation-Guide
-Installation and basic configuration for AWS Ubuntu instance for full MEAN stack
+Installation and basic configuration for AWS Ubuntu instance for full MEAN stack.
+In this guide I will show you how to install and configure everything we need to run Mongo (database), NodeJS running with Express (backend/api) and host an Angular site (frontend/web/backoffice).
 
 **IMPORTANT: This guide assumes you have already created your AWS account, created a new aws ubuntu instance and are already connected via SSH to your instance. Every command should be run with SUDO.**
 
@@ -187,11 +188,11 @@ Finally, for production instance, check the following Ulimit settings in your AW
 
 At your production environment you may not have problems with system limits. The following thresholds and settings are particularly important for mongod and mongos deployments:
 
-> -f (file size): unlimited
-> -t (cpu time): unlimited
-> -v (virtual memory): unlimited
-> -n (open files): 999999
-> -m (memory size): unlimited
+    -f (file size): unlimited
+    -t (cpu time): unlimited
+    -v (virtual memory): unlimited
+    -n (open files): 999999
+    -m (memory size): unlimited
 
 
 
