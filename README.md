@@ -1,4 +1,4 @@
-# AWS-Ubuntu-MEAN-Stack-installation-Guide
+# AWS Ubuntu MEAN Stack Installation Guide
 Installation and basic configuration for AWS Ubuntu instance for full MEAN stack.
 In this guide I will show you how to install and configure everything we need to run Mongo (database), NodeJS running with Express (backend/api) and host an Angular site (frontend/web/backoffice).
 
