@@ -1,0 +1,80 @@
+
+#normal site configuration with HTTPS
+server {
+        listen 443 default_server;
+        listen [::]:443 default_server;
+        index index.html index.htm;
+
+        server_name mysite.com www.mysite.com;
+
+        ssl on;
+        ssl_certificate /etc/letsencrypt/live/mysite.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/mysite.com/privkey.pem;
+
+        location / {
+                root  /var/www/html/web;
+                try_files $uri $uri/ /index.html =404;
+        }
+}
+
+#additional configuration for backoffice subdomain site
+server {
+        listen 443;
+        listen [::]:443;
+        index index.html index.htm;
+
+        server_name admin.mysite.com;
+
+        ssl on;
+        ssl_certificate /etc/letsencrypt/live/admin.mysite.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/admin.mysite.com/privkey.pem;
+
+        location / {
+                root  /var/www/html/backoffice;
+                try_files $uri $uri/ /index.html =404;
+        }
+}
+
+#additional configuration for backend api, port should be whatever port you are running your script on (your app.listen in index.js file)
+upstream api.mysite.com {
+  server 127.0.0.1:3003;
+}
+
+#additional configuration for backend api
+server {
+  listen 443;
+  server_name api.mysite.com;
+
+ access_log /var/log/nginx/secure.log;
+    error_log /var/log/nginx/secure.error.log debug;
+
+# ssl configs
+  ssl on;
+  ssl_certificate /etc/letsencrypt/live/api.mysite.com/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/api.mysite.com/privkey.pem;
+
+  location / {
+              proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarder-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-NginX-Proxy true;
+
+       proxy_pass http://api.mysite.com; 
+  }
+}
+
+#automatic redirection from http to https site for additional security
+server {
+    listen  80;
+    server_name mysite.com;
+    rewrite ^(.*)$ https://mysite.com$1 permanent;
+}
+
+server {
+    listen  80;
+    server_name admin.mysite.com;
+    rewrite ^(.*)$ https://admin.mysite.com$1 permanent;
+}
+
+
+
